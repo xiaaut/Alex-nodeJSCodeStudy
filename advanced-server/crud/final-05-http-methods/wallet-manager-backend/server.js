@@ -27,6 +27,12 @@ server.post('/products/add', async (req, res) => {
 
   console.log(addProduct);
 
+  if (!addProduct) {
+    return res.status(400).json({
+      message: 'Product is required'
+    })
+  }
+
   const updatedProducts = [...products, addProduct];
 
   await writeFile('./data.json', JSON.stringify(updatedProducts), 'utf-8');
