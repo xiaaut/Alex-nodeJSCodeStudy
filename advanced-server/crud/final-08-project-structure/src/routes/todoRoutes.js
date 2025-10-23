@@ -14,8 +14,8 @@ const router = express.Router()
 // router.post('/todos', createTodo)
 // router.patch('/todos', updateTodo)
 router.route('/todos').get(getTodos).post(createTodo).patch(updateTodo)
-router.get('/todos/:id', getTodoById)
-router.delete('/todos/:id', deleteTodoById)
-// router.route('/todos/:id').get(getTodoById).delete(deleteTodoById)
+// router.get('/todos/:todoId', getTodoById)
+// router.delete('/todos/:todoId', deleteTodoById)
+router.route('/todos/:todoId').get(getTodoById).delete(deleteTodoById)
 
 export default router

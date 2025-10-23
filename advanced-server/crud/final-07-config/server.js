@@ -23,6 +23,8 @@ app.get('/todos/:todoId', async (req, res) => {
   const todosData = await readFile('./data.json', 'utf-8');
   const todos = JSON.parse(todosData);
 
+  console.log(req.params);
+
   const todoId = req.params.todoId;
 
   const todo = todos.find((todo) => todo.id === Number(todoId));
