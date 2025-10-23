@@ -15,22 +15,15 @@ server.get('/products', async (_req, res) => {
   return res.status(200).json(products);
 });
 
-server.post('/products', async (req, res) => {
+server.post('/products/add', async (req, res) => {
   const productsData = await readFile('./data.json', 'utf-8');
   const products = JSON.parse(productsData);
 
-  // const addProduct = req.params.addProduct;
-  // const parsedAddProduct = JSON.parse(addProduct);
-
   const addProduct = req.body;
-
-
-  console.log(addProduct);
-
   if (!addProduct) {
     return res.status(400).json({
-      message: 'Product is required'
-    })
+      message: 'Bad request',
+    });
   }
 
   const updatedProducts = [...products, addProduct];
