@@ -1,4 +1,30 @@
-# 如何修改 npm 为 pnpm
+# Alex-nodeJS学习笔记
+
+## 读写文件的方法
+
+```javascript
+import { readFile, writeFile, appendFile } from 'node:fs/promises';
+
+const data = await readFile('./data.json', 'utf8');
+
+// await writeFile("./data.json", "alex-john", "utf8");
+
+await appendFile('./data.json', 'alex-john', 'utf8');
+
+console.log(data);
+```
+
+在终端运行文件： node  main.js
+
+![](node笔记/image-20251025220850181.png)
+
+
+
+
+
+
+
+## 如何修改 npm 为 pnpm
 
 检查当前 npm 的版本
 
