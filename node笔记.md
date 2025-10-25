@@ -23,3 +23,28 @@ npm install pnpm -g
 
 pnpm -v
 ```
+
+# env配置文件
+
+如何使用.env配置文件
+
+需要通过安装包  pnpm add @dotenvx/dotenvx
+
+之后再package.json 文件中添加如下代码：
+
+```
+"scripts": {
+    "dev": "dotenvx run -- node server.js"
+  },
+```
+
+# sequelize
+
+`sequelize` 是一个基于 Node.js 的 ORM（对象关系映射）工具，它允许你通过 JavaScript/TypeScript 代码操作关系型数据库（如 MySQL、PostgreSQL、SQLite、MSSQL 等），无需直接编写 SQL 语句，而是通过面向对象的方式操作数据。
+
+pnpm add sequelize
+
+pnpm add pg pg-hstore
+
+
+
