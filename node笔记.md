@@ -1,4 +1,4 @@
-# Alex-nodeJS学习笔记
+# nodeJS学习笔记
 
 ## 读写文件的方法
 
@@ -68,6 +68,46 @@ npm install pnpm -g
 
 pnpm -v
 ```
+
+
+
+## express
+
+25年之后使用的node版本要大于20，不然很多功能无法正常使用
+
+**以下代码以 pnpm 为例**
+
+```
+初始化项目
+pnpm init
+
+安装 express
+pnpm add express
+```
+
+注意：
+
+package.json 文件中需要添加一行代码： "type": "module"
+
+![](node笔记/image-20251029193921115.png)
+
+
+
+
+
+## 响应状态码
+
+200  响应成功
+
+400 请求参数有问题
+
+404 找不到相应的内容
+
+
+
+
+
+
 
 # env配置文件
 
