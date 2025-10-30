@@ -71,6 +71,16 @@ pnpm -v
 
 
 
+## 响应状态码
+
+200  响应成功
+
+400 请求参数有问题
+
+404 找不到相应的内容
+
+
+
 ## express
 
 25年之后使用的node版本要大于20，不然很多功能无法正常使用
@@ -91,17 +101,41 @@ package.json 文件中需要添加一行代码： "type": "module"
 
 ![](node笔记/image-20251029193921115.png)
 
+### req.params
+
+路由路径和参数
+
+参数为下图中的 :name
+
+![](node笔记/image-20251031013929839.png)
+
+此属性是一个对象，其中包含映射到[命名路由“参数”](https://express.js.cn/en/guide/routing.html#route-parameters)的属性。例如，如果您有路由 `/user/:name`，那么“name”属性可以通过 `req.params.name` 访问。此对象默认为 `{}`。
+
+```
+// GET /user/tj
+console.dir(req.params.name)
+// => "tj"
+```
+
+
+
+### res.json
+
+发送 JSON 响应。此方法发送一个响应（带有正确的内容类型），该响应是使用 [JSON.stringify()](https://mdn.org.cn/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 将参数转换为 JSON 字符串后的结果。
+
+参数可以是任何 JSON 类型，包括对象、数组、字符串、布尔值、数字或 null，你也可以用它来将其他值转换为 JSON。
+
+```
+res.json(null)
+res.json({ user: 'tobi' })
+res.status(500).json({ error: 'message' })
+```
 
 
 
 
-## 响应状态码
 
-200  响应成功
 
-400 请求参数有问题
-
-404 找不到相应的内容
 
 
 
