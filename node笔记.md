@@ -69,6 +69,18 @@ npm install pnpm -g
 pnpm -v
 ```
 
+### npm和pnpm的区别
+
+| 功能          | npm 命令            | pnpm 命令          | 备注                        |
+| ------------- | ------------------- | ------------------ | --------------------------- |
+| 添加依赖      | `npm install xxx`   | `pnpm add xxx`     | pnpm 推荐用 add             |
+| 移除依赖      | `npm uninstall xxx` | `pnpm remove xxx`  | pnpm 用 remove              |
+| 初始化项目    | `npm init`          | `pnpm init`        | 一致                        |
+| 安装全部依赖  | `npm install`       | `pnpm install`     | 一致                        |
+| 运行脚本      | `npm run xxx`       | `pnpm run xxx`     | 一致                        |
+| 清理缓存      | `npm cache clean`   | `pnpm store prune` | 不同命令不同作用            |
+| monorepo 过滤 | 无                  | `pnpm --filter`    | pnpm 对 monorepo 支持更友好 |
+
 
 
 ## 响应状态码
@@ -129,6 +141,24 @@ console.dir(req.params.name)
 res.json(null)
 res.json({ user: 'tobi' })
 res.status(500).json({ error: 'message' })
+```
+
+### cors
+
+```
+var express = require('express')
+var cors = require('cors')
+var app = express()
+
+app.use(cors())
+
+app.get('/products/:id', function (req, res, next) {
+  res.json({msg: 'This is CORS-enabled for all origins!'})
+})
+
+app.listen(80, function () {
+  console.log('CORS-enabled web server listening on port 80')
+})
 ```
 
 
