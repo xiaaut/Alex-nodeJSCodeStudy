@@ -87,6 +87,19 @@ pnpm -v
 | 清理缓存      | `npm cache clean`   | `pnpm store prune` | 不同命令不同作用            |
 | monorepo 过滤 | 无                  | `pnpm --filter`    | pnpm 对 monorepo 支持更友好 |
 
+## 全局安装nodemon
+
+pnpm add -g nodemon
+
+```
+查看全局安装的包
+pnpm list -g
+```
+
+![image-20251112004237530](node笔记/image-20251112004237530.png)
+
+之后package.json文件中的scripts如图配置
+
 
 
 ## 响应状态码
@@ -105,7 +118,7 @@ pnpm -v
 
 **以下代码以 pnpm 为例**
 
-```
+```js
 初始化项目
 pnpm init
 
@@ -129,7 +142,7 @@ package.json 文件中需要添加一行代码： "type": "module"
 
 此属性是一个对象，其中包含映射到[命名路由“参数”](https://express.js.cn/en/guide/routing.html#route-parameters)的属性。例如，如果您有路由 `/user/:name`，那么“name”属性可以通过 `req.params.name` 访问。此对象默认为 `{}`。
 
-```
+```javascript
 // GET /user/tj
 console.dir(req.params.name)
 // => "tj"
@@ -143,15 +156,17 @@ console.dir(req.params.name)
 
 参数可以是任何 JSON 类型，包括对象、数组、字符串、布尔值、数字或 null，你也可以用它来将其他值转换为 JSON。
 
-```
+```js
 res.json(null)
 res.json({ user: 'tobi' })
 res.status(500).json({ error: 'message' })
 ```
 
-### cors
+### cors 中间件
 
-```
+解决跨域请求的问题
+
+```js
 var express = require('express')
 var cors = require('cors')
 var app = express()
@@ -167,9 +182,94 @@ app.listen(80, function () {
 })
 ```
 
+### express.json() 中间件
+
+想要通过req.body添加数据时，需要使用 express.json() 中间件
+
+```js
+const express = require('express')
+
+const app = express()
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.post('/profile', (req, res, next) => {
+  console.log(req.body)
+  res.json(req.body)
+})
+```
 
 
 
+## http请求方法
+
+### get
+
+请求到的数据都从地址栏中获取
+
+增删改查都可以使用get方法，但是新增内容有文本限制，超出就会报错
+
+```javascript
+app.get('/todos', async (_req, res) => {
+  const todosData = await readFile('./data.json', 'utf-8');
+  const todos = JSON.parse(todosData);
+
+  return res.status(200).json(todos);
+});
+```
+
+### post
+
+想要通过req.body添加数据时，需要使用 express.json() 中间件
+
+```js
+const express = require('express')
+
+const app = express()
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.post('/profile', (req, res, next) => {
+  console.log(req.body)
+  res.json(req.body)
+})
+```
+
+后端代码：
+
+![](node笔记/image-20251113014954454.png)
+
+前端代码react：
+
+![image-20251113015028720](node笔记/image-20251113015028720.png)
+
+
+
+### 端点
+
+endpoint 端点
+
+![image-20251119002114448](node笔记/image-20251119002114448.png)
+
+API是“菜单”，endpoint是“菜单”上的每一道菜
+
+
+
+### 端口
+
+port 端口
+
+
+
+
+
+
+
+## 扩展运算符
+
+![](node笔记/image-20251113013010783.png)
 
 
 
