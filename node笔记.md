@@ -22,6 +22,12 @@ console.log(data);
 
 ![](node笔记/image-20251026010510074.png)
 
+
+
+**异步函数就是指返回值为Promise对象的函数**
+
+
+
 CommonJS是同步加载模组，ES为异步加载模组。为了浏览器的兼容性和代码性能，之后都是用ES异步写法
 
 ### CommonJS 与 ES 模块（ESM）的区别
@@ -160,10 +166,6 @@ app.listen(80, function () {
   console.log('CORS-enabled web server listening on port 80')
 })
 ```
-
-
-
-
 
 
 
