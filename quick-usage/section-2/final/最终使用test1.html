@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>元旦祝福</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* 中国红背景 */
+            background: radial-gradient(circle, #d41414 0%, #8a0000 100%);
+            font-family: 'Courier New', Courier, monospace;
+            touch-action: none;
+        }
+
+        #message-box {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #ffffff;
+            z-index: 10;
+            pointer-events: none;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #ffe4e1;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background-color: #fff;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .hint1 {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        /* --- 新增：音乐控制按钮样式 --- */
+        #music-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            z-index: 20;
+            cursor: pointer;
+            opacity: 0.8;
+            /* 默认为静止状态 */
+        }
+
+        /* 音乐播放时的旋转动画 */
+        .rotating {
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 简单的音符图标绘制 (CSS画图) */
+        #music-btn::before {
+            content: '♪';
+            color: #ffd700;
+            font-size: 30px;
+            line-height: 30px;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio id="bgm" loop>
+        <source src="https://music.163.com/song/media/outer/url?id=478507889.mp3" type="audio/mpeg">
+        您的浏览器不支持 audio 标签。
+    </audio>
+
+    <div id="music-btn" onclick="toggleMusic()"></div>
+
+    <div id="message-box">
+        <h1 id="title"></h1>
+        <p id="content"></p>
+    </div>
+
+    <div class="hint">👆🏻 点击屏幕 开启音乐与烟花 点亮2026 👆🏻</div>
+    <div class="hint1">@猿编程</div>
+
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // --- 1. 音乐控制逻辑 ---
+        const bgm = document.getElementById('bgm');
+        const musicBtn = document.getElementById('music-btn');
+        let isMusicPlaying = false;
+
+        function toggleMusic () {
+            if (isMusicPlaying) {
+                bgm.pause();
+                musicBtn.classList.remove('rotating');
+                musicBtn.style.opacity = '0.5'; // 暂停时变暗
+            } else {
+                bgm.play();
+                musicBtn.classList.add('rotating');
+                musicBtn.style.opacity = '1';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // --- 2. 打字机效果 ---
+        const titleText = "Happy New Year!";
+        const contentText = "Hello World, Hello 2026.\n愿尊敬的长辈和亲爱的同学们幸福常在，\n愿您的健康没有Bug,\n愿您的快乐像 while true 一样无限循环上升！\n新的一年，\n让我们一起相伴未来！\n\n—— 关春阳";
+
+        const titleEl = document.getElementById('title');
+        const contentEl = document.getElementById('content');
+        let i = 0, j = 0;
+
+        function typeTitle () {
+            if (i < titleText.length) {
+                titleEl.innerHTML += titleText.charAt(i);
+                i++;
+                setTimeout(typeTitle, 100);
+            } else {
+                titleEl.innerHTML += '<span class="cursor"></span>';
+                setTimeout(typeContent, 500);
+            }
+        }
+
+        function typeContent () {
+            const oldCursor = titleEl.querySelector('.cursor');
+            if (oldCursor) oldCursor.remove();
+            if (j < contentText.length) {
+                let char = contentText.charAt(j);
+                if (char === '\n') char = '<br>';
+                contentEl.innerHTML += char;
+                j++;
+                setTimeout(typeContent, 50);
+            } else {
+                contentEl.innerHTML += '<span class="cursor"></span>';
+                autoLaunch();
+            }
+        }
+
+        // --- 3. 烟花逻辑 ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas () {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 5 + 2;
+                this.vx = Math.cos(angle) * velocity;
+                this.vy = Math.sin(angle) * velocity;
+                this.alpha = 1;
+                this.gravity = 0.06;
+                this.friction = 0.97;
+            }
+            draw () {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            update () {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.015;
+            }
+        }
+
+        function createFirework (x, y) {
+            const colors = ['#ffffff', '#FFD700', '#00FFFF', '#7FFF00', '#FF69B4'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let k = 0; k < 40; k++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function animate () {
+            ctx.fillStyle = 'rgba(138, 0, 0, 0.2)'; // 配合红底的遮罩
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                if (p.alpha <= 0) particles.splice(index, 1);
+                else { p.update(); p.draw(); }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- 核心交互：点击屏幕放烟花 + 尝试播放音乐 ---
+        let hasInteracted = false;
+
+        function handleInput (e) {
+            e.preventDefault();
+
+            // 解决浏览器自动播放限制：用户第一次点击时，触发播放
+            if (!hasInteracted) {
+                bgm.play().then(() => {
+                    isMusicPlaying = true;
+                    musicBtn.classList.add('rotating');
+                    musicBtn.style.opacity = '1';
+                }).catch(err => {
+                    console.log("音乐播放失败(可能是交互限制):", err);
+                });
+                hasInteracted = true;
+            }
+
+            let clientX, clientY;
+            if (e.type === 'touchstart') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            createFirework(clientX, clientY);
+        }
+
+        document.addEventListener('click', handleInput);
+        document.addEventListener('touchstart', handleInput, { passive: false });
+
+        function autoLaunch () {
+            let count = 0;
+            const timer = setInterval(() => {
+                createFirework(
+                    Math.random() * canvas.width,
+                    Math.random() * (canvas.height / 2)
+                );
+                count++;
+                if (count > 8) clearInterval(timer);
+            }, 600);
+        }
+
+        typeTitle();
+        animate();
+    </script>
+</body>
+
+</html>
